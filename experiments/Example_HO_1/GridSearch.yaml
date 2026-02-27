@@ -1,0 +1,60 @@
+datasets:
+- BA2grid:
+    root: ./data/datasets
+explain_settings:
+  evaluation:
+    metrics:
+      Plausibility:
+        discretizer:
+          PerfectK: {}
+  explainers:
+    CAM:
+      edge_mask_type: null
+      model_config:
+        mode: binary_classification
+        return_type: raw
+        task_level: graph
+      node_mask_type: object
+hyper_parameters:
+  aF:
+  - ReLU
+  cO:
+  - GraphConvGIN
+  dE:
+  - 32
+  dropout:
+  - 0.1
+  graphNorm:
+  - false
+  lr:
+  - 0.001
+  nL:
+  - 3
+  pooling:
+  - mean
+  wD:
+  - 0.001
+task_properties:
+  batchSize: 256
+  earlyStoppingLogAll: false
+  earlyStoppingMetric: Loss
+  earlyStoppingMinChange: 0.0001
+  earlyStoppingPatience: 20
+  earlyStoppingTarget: Minimize
+  kfold: 1
+  maxEpoch: 100
+  metrics:
+  - torchmetrics.classification.Accuracy
+  - torchmetrics.classification.F1Score
+  - torchmetrics.classification.AUROC
+  - torchmetrics.classification.Precision
+  - torchmetrics.classification.Recall
+  - torchmetrics.classification.MatthewsCorrCoef
+  num_samples: 1
+  optimizer: Adam
+  ratio:
+  - 0.2
+  - 0.1
+  stratify: true
+  task: binary
+  validation: HO

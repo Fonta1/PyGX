@@ -1,0 +1,138 @@
+datasets:
+    - BA2grid:
+        root: './data/datasets'
+
+    #Other available datasets
+    # - Benzene:
+    #     root: './data/datasets'
+    # - Mutagenicity:
+    #     root: './data/datasets'
+    # - AlkaneCarbonyl:
+    #     root: './data/datasets'
+    # - FluorideCarbonyl:
+    #     root: './data/datasets'
+    # - BA2Motif:
+    #     root: './data/datasets'
+    # - GridHouse:
+    #     root: './data/datasets'
+    # - OGX:
+    #     root: './data/datasets'
+    #     data_name: 'alfa'
+
+task_properties:
+    validation: HO #CV or CT
+    kfold: 1 # not used in HO
+    ratio:
+    - 0.2 #validation ratio
+    - 0.1 #test ratio
+    stratify: True
+    metrics: #Metrics to track during training
+      - torchmetrics.classification.Accuracy
+      - torchmetrics.classification.F1Score
+      - torchmetrics.classification.Precision
+      - torchmetrics.classification.Recall
+      - torchmetrics.classification.MatthewsCorrCoef
+    task: binary #only binary classificaiton tasks implemented
+    batchSize: 256 #Batch size
+    num_samples: 1 #Number of random seeds for each combination of hyperparameters
+
+hyper_parameters:
+    cO: 
+        - GESN
+    num_layers: #number of layers
+    - 1
+    hidden_features: #number of units for each layer
+     - 32
+    #  - 64
+    iterations: #number of iterations
+      - 30
+    epsilon: #convergence condition
+      - 0.000001 
+    bias:
+      - 0.1
+    init: # "uniform, normal, ring" # type of initializer
+      - "uniform"
+    rho: #contractivity
+      - 0.8
+      # - 0.9
+    sigma: #if rho is given sigma is not taken into account
+      - 1
+    scale: #scale of input matrix 
+      - 1
+      # - 0.5
+    alpha: #max, mean, median of graphs spectral radius
+      - max
+      # - mean
+      # - median
+    ld: # readout regularizer
+      - 0.001
+      # - 0.01
+    readout: # Specify the readout
+      #  - Lasso
+      #  - LogisticRegressionL1
+       - RidgeRegression
+
+#Settings for explanations
+explain_settings:
+    explainers: #Available explainers for graph classification, they generate node relevance masks
+        # Grad: #Explainer class name with parameters
+        #     node_mask_type: 'attributes'
+        #     edge_mask_type: 'object'
+        #     model_config:
+        #         mode: 'binary_classification'
+        #         task_level: 'graph'
+        #         return_type: 'raw'
+        # IntGrad:
+        #     node_mask_type: 'attributes'
+        #     edge_mask_type: 'object'
+        #     model_config:
+        #         mode: 'binary_classification'
+        #         task_level: 'graph'
+        #         return_type: 'raw'
+        # RandomExplainer:
+        #     node_mask_type: 'object'
+        #     edge_mask_type: 'object'
+        #     model_config:
+        #         mode: 'binary_classification'
+        #         task_level: 'graph'
+        #         return_type: 'raw'
+        # GNNExpl:
+        #     node_mask_type: 'object'
+        #     edge_mask_type: null
+        #     model_config:
+        #         mode: 'binary_classification'
+        #         task_level: 'graph'
+        #         return_type: 'raw'
+        CAM:
+            node_mask_type: 'object'
+            edge_mask_type: null
+            model_config:
+                mode: 'binary_classification'
+                task_level: 'graph'
+                return_type: 'raw'
+    evaluation:
+        metrics: 
+            Plausibility: #Metric class name and parameters
+              discretizer: #not used for plausibility
+                PerfectK: {} #Discretizer class name with parameters
+            # Accuracy: 
+            #   discretizer: 
+            #     PerfectK: {}
+            # F1Score: 
+            #   discretizer: 
+            #     PerfectK: {}
+            # Precision: 
+            #   discretizer: 
+            #     PerfectK: {}
+            # Recall: 
+            #   discretizer: 
+            #     PerfectK: {}
+            # MCC: 
+            #   discretizer: 
+            #     PerfectK: {}
+            # FidelityMinus:
+            #   discretizer: 
+            #     PerfectK: {}
+            # FidelityPlus:
+            #   discretizer: 
+            #     PerfectK: {}

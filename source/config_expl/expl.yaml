@@ -1,0 +1,66 @@
+model_list: #Target models to explain
+  - model0:
+      path: ../ray_storage/Example_HO_1/trial_40525_00000/checkpoint_000000/checkpoint.pt #Path to load
+      dataset: #Dataset used
+        BA2grid:
+          root: './data/datasets'
+      task_info: #Used to find the test split
+        ratio:
+        - 0.2
+        - 0.1
+        validation: HO
+        kfold: 1
+        stratify: True
+
+#Explanation settings as in grid_Conv.yml
+explain_settings: 
+  explainers:
+      Grad:
+          node_mask_type: 'attributes'
+          edge_mask_type: 'object'
+          model_config:
+              mode: 'binary_classification'
+              task_level: 'graph'
+              return_type: 'raw'
+      IntGrad:
+          node_mask_type: 'attributes'
+          edge_mask_type: 'object'
+          model_config:
+              mode: 'binary_classification'
+              task_level: 'graph'
+              return_type: 'raw'
+      RandomExplainer:
+          node_mask_type: 'object'
+          edge_mask_type: 'object'
+          model_config:
+              mode: 'binary_classification'
+              task_level: 'graph'
+              return_type: 'raw'
+      GNNExpl:
+          node_mask_type: 'object'
+          edge_mask_type: null
+          model_config:
+              mode: 'binary_classification'
+              task_level: 'graph'
+              return_type: 'raw'
+      CAM:
+          node_mask_type: 'object'
+          edge_mask_type: null
+          model_config:
+              mode: 'binary_classification'
+              task_level: 'graph'
+              return_type: 'raw'
+  evaluation:
+    metrics:
+        Plausibility: 
+          discretizer: 
+            PerfectK: {}
+        Accuracy: 
+          discretizer: 
+            PerfectK: {}
+        F1Score: 
+          discretizer: 
+            PerfectK: {}
+        # FidelityPlus:
+        #   discretizer: 
+        #     PerfectK: {}
