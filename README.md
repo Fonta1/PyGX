@@ -62,7 +62,7 @@ PyGX includes datasets specifically curated for graph classification with ground
 
 | Chemistry Datasets | Reference | Repository|
 | :--- | :--- | :--- |
-| **OpenGraphXAI** | [Fontaensi et al., (2025)](https://arxiv.org/abs/2505.12437) | [Repo](https://github.com/OpenGraphXAI/benchmarks) |
+| **OpenGraphXAI** | [Fontanesi et al., (2025)](https://arxiv.org/abs/2505.12437) | [Repo](https://github.com/OpenGraphXAI/benchmarks) |
 | **Mutagenicity** | [Agarwal et al., (2023)](https://www.nature.com/articles/s41597-023-01974-x) | [Repo](https://github.com/mims-harvard/GraphXAI) |
 | **Benzene** | [Agarwal et al., (2023)](https://www.nature.com/articles/s41597-023-01974-x) | [Repo](https://github.com/mims-harvard/GraphXAI) |
 | **Alkane Carbonyl** | [Agarwal et al., (2023)](https://www.nature.com/articles/s41597-023-01974-x) | [Repo](https://github.com/mims-harvard/GraphXAI) |
