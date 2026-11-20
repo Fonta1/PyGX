@@ -1,5 +1,6 @@
 # PyGX: Python Graph XAI
 
+[![tests](https://github.com/Fonta1/PyGX/actions/workflows/tests.yml/badge.svg)](https://github.com/Fonta1/PyGX/actions/workflows/tests.yml)
 [![Python 3.12](https://img.shields.io/badge/python-3.12-blue.svg)](https://www.python.org/downloads/release/python-3123/)
 [![PyTorch Geometric](https://img.shields.io/badge/PyG-2.0+-red.svg)](https://pytorch-geometric.readthedocs.io/en/latest/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)

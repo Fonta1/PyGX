@@ -12,6 +12,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   Runs on CPU in seconds, without a GPU or W&B.
 - `build_model`: a single function that builds a model from a grid-search config,
   used by both the trainer and the explanation generator.
+- `requirements-test.txt`: minimal CPU-only dependencies for running the tests.
+- Continuous integration with GitHub Actions: Ruff and pytest run on every push and pull request.
 - README section "Supported options per model".
 
 ### Changed
