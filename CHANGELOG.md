@@ -5,7 +5,11 @@ All notable changes to PyGX are documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+
 ## [Unreleased]
+
+
+## [2.0.0] - 2026-11-20
 
 ### Added
 - Test suite (pytest) covering models, discretizers, data splits and training steps.
@@ -47,5 +51,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 Final version of PyGX at the end of the Ph.D., as used for the thesis.
 
-[Unreleased]: https://github.com/Fonta1/PyGX/compare/v1.0.0...HEAD
+[Unreleased]: https://github.com/Fonta1/PyGX/compare/v2.0.0...HEAD
+[2.0.0]: https://github.com/Fonta1/PyGX/compare/v1.0.0...v2.0.0
 [1.0.0]: https://github.com/Fonta1/PyGX/releases/tag/v1.0.0
