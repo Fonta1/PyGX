@@ -5,6 +5,7 @@ import importlib
 import pandas as pd
 from collections import defaultdict
 from explain.track import ExplTracker
+from models.GraphModel import build_model
 from ray.util.multiprocessing import Pool
 from data.dataHandler import prepare_data
 
@@ -17,11 +18,7 @@ class ParallelGenerator():
         self.num_gpus = num_gpus
 
     def _initialize_model(self, config, num_input_features, num_classes, **kwargs):
-        model_module = 'models.GraphModel'
-        module = importlib.import_module(model_module)
-        model_class = getattr(module, config['cO'])
-        model = model_class(num_input_features, config['dE'], num_classes, config['nL'], config["aF"], config['dropout'], config['graphNorm'], **kwargs).to(self.device)
-        return model
+        return build_model(config,  num_input_features, num_classes, **kwargs).to(self.device)
 
     def _explain_graph(self, model_ref, data_ref, explainer_name_ref, index):
         model = ray.get(model_ref)
