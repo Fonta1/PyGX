@@ -10,6 +10,7 @@ from torch.nn import Parameter
 from torch import linalg as LA
 from ray.train import Checkpoint
 from explain.track import ExplTracker
+from models.GraphModel import build_model
 from train.Track import EarlyStopper, Tracker
 from torch_geometric.loader import DataLoader
 from data.dataHandler import prepare_data
@@ -77,11 +78,7 @@ class Trainer:
         return df
     
     def _initialize_model(self, config, num_input_features, num_classes, **kwargs):
-        model_module = 'models.GraphModel'
-        module = importlib.import_module(model_module)
-        model_class = getattr(module, config['cO'])
-        model = model_class(num_input_features, config['dE'], num_classes, config['nL'], config["aF"], config['dropout'], config['graphNorm'], config['pooling'], **kwargs).to(self.device)
-        return model
+        return build_model(config,  num_input_features, num_classes, **kwargs).to(self.device)
     
     def _train_step(self, loader, model, optimizer, loss_f, tracker, **kwargs):
         with torch.enable_grad():
@@ -108,7 +105,6 @@ class Trainer:
                 data.to(self.device)
                 out = model(data.x, data.edge_index, data.batch, data.edge_weight, data.edge_attr)
                 loss = loss_f(out, data.y)
-                loss += loss.item()
                 tracker.update_loss(loss.item(), len(loader))
                 preds = torch.nn.functional.softmax(out, -1)
                 tracker.update(preds, data.y)
