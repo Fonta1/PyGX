@@ -1,0 +1,14 @@
+# Minimal dependencies for running the test suite (locally and in CI).
+# Versions match requirements.txt. Install torch first, CPU-only:
+#   pip install torch==2.5.1 --index-url https://download.pytorch.org/whl/cpu
+#   pip install -r requirements-test.txt
+torch==2.5.1
+torch_geometric==2.3.1
+torchmetrics==1.6.1
+scikit-learn==1.6.1
+numpy==2.1.2
+pandas==2.2.3
+PyYAML==6.0.2
+ray[tune]==2.42.0
+pytest==8.3.4
+ruff==0.17.6

@@ -1,5 +1,6 @@
 # PyGX: Python Graph XAI
 
+[![tests](https://github.com/Fonta1/PyGX/actions/workflows/tests.yml/badge.svg)](https://github.com/Fonta1/PyGX/actions/workflows/tests.yml)
 [![Python 3.12](https://img.shields.io/badge/python-3.12-blue.svg)](https://www.python.org/downloads/release/python-3123/)
 [![PyTorch Geometric](https://img.shields.io/badge/PyG-2.0+-red.svg)](https://pytorch-geometric.readthedocs.io/en/latest/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
@@ -100,6 +101,18 @@ To perform a grid search with convolutional layers, modify `config_file/grid_Con
 ```bash
 python3 main.py trainGraphConv --name Conv --cuda --exp_config ./config_file/grid_Conv.yaml
 ```
+
+### Supported options per model
+The meaning of `nL` and the support for `dropout` and `graphNorm` depend on the model.
+
+| Model (`cO`) | `nL` means | `dropout` | `graphNorm` | `pooling` | `aF` |
+| :--- | :--- | :--- | :--- | :--- | :--- |
+| `GraphConvGIN`, `GraphConvGCN`, `GraphConvGC`, `GraphConvGAT`, `GraphConvGAT2`, `GraphConvPNA` | Stacked message-passing layers | Applied after each layer | Applied after each layer | `sum`, `mean` | `ReLU`, `Tanh` |
+| `GraphConvCheb` | Chebyshev order K | Must be `0` | Must be `False` | `sum`, `mean` | `ReLU`, `Tanh` |
+| `GraphConvARMA` | Internal ARMA iterations | Must be `0` | Must be `False` | `sum`, `mean` | `ReLU`, `Tanh` |
+
+`GraphConvCheb` and `GraphConvARMA` compute their iterations inside a single convolution block, so `dropout` and `graphNorm` cannot be applied after each iteration as they are for the other models. Since PyGX trains all models under the same conditions, these options are rejected rather than applied differently: unsupported values raise a `ValueError` when the model is built, before training starts.
+
 ### 2. Generating Explanations
 
 Explaining every trained model can be computationally expensive. We recommend the following workflow:

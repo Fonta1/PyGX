@@ -9,6 +9,15 @@ class Discretizer(object):
 
     def discretize(self, importances, gts=None):
         raise NotImplementedError
+
+    @staticmethod
+    def _top_k_mask(importances, k):
+        """Return a 0/1 mask selecting the k most important nodes, and k."""
+        mask = torch.zeros_like(importances, dtype=torch.long)
+        if k == 0:
+            return mask, 0
+        mask[torch.argsort(importances)[-k:]] = 1
+        return mask, k
     
 class PerfectK(Discretizer):
     def __init__(self, device, **kwargs):
@@ -16,12 +25,8 @@ class PerfectK(Discretizer):
         self.precompute = False
         
     def discretize(self, importances, gt):
-        importances = importances.to(self.device)
-        topk = torch.count_nonzero(gt.to(self.device))
-        inds = torch.argsort(importances)[-int(topk):]
-        mask = torch.zeros_like(importances)
-        mask[inds] = 1
-        return mask.long(), torch.count_nonzero(mask.long()).item()
+        k = int(torch.count_nonzero(gt.to(self.device)))
+        return self._top_k_mask(importances.to(self.device), k)
 
 class LargestExplanationK(Discretizer):
     def __init__(self, device, **kwargs):
@@ -29,17 +34,8 @@ class LargestExplanationK(Discretizer):
         self.precompute = True
 
     def discretize(self, importances, gts):
-        importances = importances.to(self.device)
-        topk = 0
-        for gt in gts:
-            tmp = torch.count_nonzero(gt.to(self.device))
-            if tmp > topk:
-                topk = tmp
-
-        inds = torch.argsort(importances)[-int(topk):]
-        mask = torch.zeros_like(importances)
-        mask[inds] = 1
-        return mask.long(), torch.count_nonzero(mask.long()).item()
+        k = int(max([torch.count_nonzero(gt.to(self.device)) for gt in gts], default=0))
+        return self._top_k_mask(importances.to(self.device), k)
 
 class TopPercK(Discretizer):
     def __init__(self, device, **kwargs):
@@ -48,8 +44,6 @@ class TopPercK(Discretizer):
         self.topK = self.hypers['topK']
         
     def discretize(self, importances, gt):
-        top = int(math.floor(importances.shape[0]*self.topK))
-        inds = torch.argsort(importances)[-int(top):]
-        mask = torch.zeros_like(importances)
-        mask[inds] = 1
-        return mask.long(), torch.count_nonzero(mask.long()).item()
+        # round() absorbs float noise, e.g. 25 * 0.28 == 7.000000000000001
+        k = int(math.ceil(round(importances.shape[0]*self.topK, 9)))
+        return self._top_k_mask(importances.to(self.device), k)
